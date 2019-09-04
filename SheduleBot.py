@@ -58,7 +58,9 @@ while True:
         time.sleep(3600)
     elif vvv == 18:
         bot.SendMsg(messageText = days[1], peerId = 160500068)
-        quit()
+        # quit()
+        time.sleep(3600)
+        main()
     else:
         time.sleep(3600)
 
