@@ -50,17 +50,16 @@ def main():
 print(os.getpid())
 nn = open("./token.token", 'r').readline()
 bot = knocker.Knocker(token = nn)
-main()
+# main()
 while True:
+    main()
     vvv = datetime.datetime.now().hour
-    if vvv == 7:
+    if vvv == 6:
         bot.SendMsg(messageText = days[0], peerId = 160500068)
-        time.sleep(3600)
+        # time.sleep(3600)
     elif vvv == 18:
         bot.SendMsg(messageText = days[1], peerId = 160500068)
         # quit()
-        time.sleep(3600)
-        main()
-    else:
-        time.sleep(3600)
+        # time.sleep(3600)
+    time.sleep(3600)
 

@@ -14,8 +14,6 @@ class Knocker:
             print(str(e))
             pass
 
-
-
         try:
             self.bot = vk_api.VkApi(token=token)
             self.bot._auth_token()
@@ -23,12 +21,6 @@ class Knocker:
         except Exception as e:
             print(str(e))
             pass
-        
-    # @classmethod
-    # def  tokenInit(self, cls, token):
-    #     self.bot = vk_api.VkApi(token=token)
-    #     self.bot._auth_token()
-    #     return cls
 
     def SendMsg(self, messageText : str, peerId):
         self.bot.method("messages.send",{"peer_id": peerId, "random_id" : random.randint(1, 1000),"message": messageText})
@@ -45,4 +37,3 @@ class Knocker:
         a = (str('doc' + str(0 - self.gId) + '_' + str(dicId)))
         self.client.method('wall.post', {'owner_id': 0 - self.gId, 'message': message, 'attachments':a, 'signed': signed, "from_group":fromGroup })
         pass
-# a = Knocker.tokenInit(token = 'fsffsfs')
