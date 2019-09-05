@@ -13,10 +13,10 @@ def main():
     headers = {'accept': "*/*", "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0", "referer": "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18"}
 
     session = requests.Session()
-    b = session.get(url=url, headers=headers)
-    a = BeautifulSoup(b.content, "html.parser")
+    rawHtml = session.get(url=url, headers=headers)
+    preParsedHtml = BeautifulSoup(rawHtml.content, "html.parser")
     i = 0
-    for card in a.find_all('div', attrs={"id":"card"}):
+    for card in preParsedHtml.find_all('div', attrs={"id":"card"}):
         if i < 2:
             date = card.contents[1].text.replace("\n", '').replace(" ", '')
             days[i] += (date + "\n")
@@ -31,9 +31,8 @@ def main():
                             subject = lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
                             auditory = lesson.contents[3].text.replace('\n', '').replace("                                                        ", '')
                             teacher = lesson.contents[5].text.replace('\n', '').replace("                                                        ", '')
-                            aaad = len(lesson.contents)
                             border = ''
-                            if aaad == 9:
+                            if len(lesson.contents) == 9:
                                 border = lesson.contents[7].text.replace('\n', '').replace("                                                        ", '')
                             days[i] += (subject + '\n' + auditory + '\n' + teacher + '\n' + border + '\n' )
                             print(subject)
@@ -48,18 +47,14 @@ def main():
     pass
 
 print(os.getpid())
-nn = open("./token.token", 'r').readline()
-bot = knocker.Knocker(token = nn)
+token = open("./token.token", 'r').readline()
+bot = knocker.Knocker(token = token)
 # main()
 while True:
     main()
-    vvv = datetime.datetime.now().hour
-    if vvv == 6:
+    hour = datetime.datetime.now().hour
+    if hour == 6:
         bot.SendMsg(messageText = days[0], peerId = 160500068)
-        # time.sleep(3600)
-    elif vvv == 18:
+    elif hour == 18:
         bot.SendMsg(messageText = days[1], peerId = 160500068)
-        # quit()
-        # time.sleep(3600)
     time.sleep(3600)
-
