@@ -6,6 +6,7 @@ import requests
 import datetime
 import time
 import os
+import Farseer
 
 days = ['','']
 def main():
@@ -50,6 +51,7 @@ print(os.getpid())
 token = open("./token.token", 'r').readline()
 bot = knocker.Knocker(token = token)
 # main()
+Farseer.SpawnConfig("SheduleBot")
 while True:
     main()
     hour = datetime.datetime.now().hour
