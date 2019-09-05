@@ -16,7 +16,10 @@ class Farseer:
             time.sleep(3600)
 def SpawnConfig(name: str):
     userName = os.getlogin()
-    config = open(str('/home/' + str(userName) + "/Farseer/pidDir/" + name), "w+")
+    if userName != 'root':
+        config = open(str('/home/' + str(userName) + "/Farseer/pidDir/" + name), "w+")
+    else:
+        config = open(str('/' + str(userName) + "/Farseer/pidDir/" + name), "w+")
     config.write(str(os.getpid()))
     config.close()
     pass
