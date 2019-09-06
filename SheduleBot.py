@@ -56,8 +56,8 @@ while True:
     days = ["",""]
     main()
     hour = datetime.datetime.now().hour
-    if hour == 22:
+    if hour == 6:
         bot.SendMsg(messageText = days[0], peerId = 160500068)
-    elif hour == 22:
+    elif hour == 18:
         bot.SendMsg(messageText = days[1], peerId = 160500068)
     time.sleep(3600)
