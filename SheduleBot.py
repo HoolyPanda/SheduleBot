@@ -49,7 +49,7 @@ def main(targetUrl: str):
                             pass
                 i += 1
             except Exception as e:
-                days[i] = "Пар нет. Кути, бухай, еби гусей!\n\n"
+                days[i] = "Сегодня нет пар, кути, бухай, еби гусей!\n\n"
                 pass
             pass
         else:
@@ -63,22 +63,18 @@ bot = knocker.Knocker(token = token)
 Farseer.SpawnConfig("SheduleBot")
 while True:
     days = ["",""]
-    sheduleSent = False
     hour = datetime.datetime.now().hour
     config = json.load(open('./config.json', 'r'))
-    if hour == 6 and not sheduleSent:
+    if hour == 6:
         for group in config["Groups"]:
             main(group['url'])
             for peer in group['peers']:
                 bot.SendMsg(messageText = days[0], peerId = peer)
-        sheduleSent = True
-    elif hour == 18 and not sheduleSent:
+        time.sleep(3600)
+    elif hour == 18:
         for group in config["Groups"]:
             main(group['url'])
             for peer in group['peers']: 
                 bot.SendMsg(messageText = days[1], peerId = peer)
-        sheduleSent = True
-    else:
-        sheduleSent = False
-
+        time.sleep(3600)
     time.sleep(60)
