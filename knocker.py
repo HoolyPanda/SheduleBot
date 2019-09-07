@@ -23,7 +23,11 @@ class Knocker:
             pass
 
     def SendMsg(self, messageText : str, peerId):
-        self.bot.method("messages.send",{"peer_id": peerId, "random_id" : random.randint(1, 1000),"message": messageText})
+        try:
+            self.bot.method("messages.send",{"peer_id": peerId, "random_id" : random.randint(1, 1000),"message": messageText})
+        except Exception as e:
+            print(str(e))
+            pass
 
     def UploadFile(self, file):
         fileToUpload = open(file, 'rb')

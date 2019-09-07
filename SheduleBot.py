@@ -7,10 +7,15 @@ import datetime
 import time
 import os
 import Farseer
+import json
+
 
 days = ['','']
-def main():
-    url = "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18"
+def main(targetUrl: str):
+    if targetUrl == "":
+        url = "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18"
+    else:
+        url = targetUrl
     headers = {'accept': "*/*", "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0", "referer": "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18"}
 
     session = requests.Session()
@@ -58,10 +63,17 @@ bot = knocker.Knocker(token = token)
 Farseer.SpawnConfig("SheduleBot")
 while True:
     days = ["",""]
-    main()
+    # main("", 0)
     hour = datetime.datetime.now().hour
+    config = json.load(open('./config.json', 'r'))
     if hour == 6:
-        bot.SendMsg(messageText = days[0], peerId = 160500068)
+        for group in config["Groups"]:
+            main(group['url'])
+            for peer in group['peers']:
+                bot.SendMsg(messageText = days[0], peerId = peer)
     elif hour == 18:
-        bot.SendMsg(messageText = days[1], peerId = 160500068)
-    time.sleep(3600)
+        for group in config["Groups"]:
+            main(group['url'])
+            for peer in group['peers']: 
+                bot.SendMsg(messageText = days[1], peerId = peer)
+    time.sleep(60)
