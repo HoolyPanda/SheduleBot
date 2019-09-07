@@ -54,7 +54,11 @@ bot = knocker.Knocker(token = token)
 Farseer.SpawnConfig("SheduleBot")
 while True:
     days = ["",""]
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(str(e))
+        pass
     hour = datetime.datetime.now().hour
     if hour == 6:
         bot.SendMsg(messageText = days[0], peerId = 160500068)
