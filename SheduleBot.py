@@ -16,7 +16,7 @@ def main(targetUrl: str):
         url = "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18"
     else:
         url = targetUrl
-    headers = {'accept': "*/*", "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0", "referer": "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18"}
+    headers = {'accept': "*/*", "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0", "referer": url}
 
     session = requests.Session()
     rawHtml = session.get(url=url, headers=headers)
