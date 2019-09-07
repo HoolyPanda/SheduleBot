@@ -25,28 +25,29 @@ def main(targetUrl: str):
     for card in preParsedHtml.find_all('div', attrs={"id":"card"}):
         if i < 2:
             try:
-                date = card.contents[1].text.replace("\n", '').replace(" ", '')
-                days[i] += (date + "\n")
-                print(date)
-                for _lesson in card.contents[3].contents[1]:
-                    if _lesson != "\n":
-                        time = _lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
-                        print(time)
-                        days[i] += (time + "\n")
-                        for lesson in _lesson.contents:
-                            if (lesson != '\n') and (len(lesson.contents) > 1):
-                                subject = lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
-                                auditory = lesson.contents[3].text.replace('\n', '').replace("                                                        ", '')
-                                teacher = lesson.contents[5].text.replace('\n', '').replace("                                                        ", '')
-                                border = ''
-                                if len(lesson.contents) == 9:
-                                    border = lesson.contents[7].text.replace('\n', '').replace("                                                        ", '')
-                                days[i] += (subject + '\n' + auditory + '\n' + teacher + '\n' + border + '\n' )
-                                print(subject)
-                                print(auditory)
-                                print(teacher)
-                                print(border)
-                            pass
+                if days[i] == "":
+                    date = card.contents[1].text.replace("\n", '').replace(" ", '')
+                    days[i] += (date + "\n")
+                    print(date)
+                    for _lesson in card.contents[3].contents[1]:
+                        if _lesson != "\n":
+                            time = _lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
+                            print(time)
+                            days[i] += (time + "\n")
+                            for lesson in _lesson.contents:
+                                if (lesson != '\n') and (len(lesson.contents) > 1):
+                                    subject = lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
+                                    auditory = lesson.contents[3].text.replace('\n', '').replace("                                                        ", '')
+                                    teacher = lesson.contents[5].text.replace('\n', '').replace("                                                        ", '')
+                                    border = ''
+                                    if len(lesson.contents) == 9:
+                                        border = lesson.contents[7].text.replace('\n', '').replace("                                                        ", '')
+                                    days[i] += (subject + '\n' + auditory + '\n' + teacher + '\n' + border + '\n' )
+                                    print(subject)
+                                    print(auditory)
+                                    print(teacher)
+                                    print(border)
+                                pass
                 i += 1
             except Exception as e:
                 days[i] = "Пар нет. кути, бухай, еби гусей!\n\n"
@@ -59,7 +60,6 @@ def main(targetUrl: str):
 print(os.getpid())
 token = open("./token.token", 'r').readline()
 bot = knocker.Knocker(token = token)
-# main()
 Farseer.SpawnConfig("SheduleBot")
 while True:
     days = ["",""]
