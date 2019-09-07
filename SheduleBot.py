@@ -49,7 +49,7 @@ def main(targetUrl: str):
                             pass
                 i += 1
             except Exception as e:
-                days[i] = "Сегодня нет пар, кути, бухай, еби гусей!\n\n"
+                days[i] = "Пар нет. кути, бухай, еби гусей!\n\n"
                 pass
             pass
         else:
