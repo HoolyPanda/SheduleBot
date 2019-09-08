@@ -1,7 +1,6 @@
 import knocker
 import vk_api
 from bs4 import BeautifulSoup
-# import curl
 import requests
 import datetime
 import time
@@ -10,27 +9,32 @@ import Farseer
 import json
 
 
-days = ['','']
+days = ['', '']
+
+
 def main(targetUrl: str):
     if targetUrl == "":
         url = "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18"
     else:
         url = targetUrl
-    headers = {'accept': "*/*", "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0", "referer": url}
+    headers = {'accept': "*/*",
+               "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0",
+               "referer": url}
 
     session = requests.Session()
     rawHtml = session.get(url=url, headers=headers)
     preParsedHtml = BeautifulSoup(rawHtml.content, "html.parser")
     i = 0
-    for card in preParsedHtml.find_all('div', attrs={"id":"card"}):
+    for card in preParsedHtml.find_all('div', attrs={"id": "card"}):
         if i < 2:
             try:
                 if days[i] == "":
-                    date = card.contents[1].text.replace("\n", '').replace(" ", '')
+                    date = card.contents[1].text.replace(
+                        "\n", '').replace(" ", '')
                     days[i] += (date + "\n")
                     print(date)
                     for _lesson in card.contents[3].contents[1]:
-                        if _lesson != "\n":
+                        if _lesson != "\n" and _lesson != 'Выходной':
                             time = _lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
                             print(time)
                             days[i] += (time + "\n")
@@ -42,7 +46,8 @@ def main(targetUrl: str):
                                     border = ''
                                     if len(lesson.contents) == 9:
                                         border = lesson.contents[7].text.replace('\n', '').replace("                                                        ", '')
-                                    days[i] += (subject + '\n' + auditory + '\n' + teacher + '\n' + border + '\n' )
+                                    days[i] += (subject + '\n' + auditory +
+                                                '\n' + teacher + '\n' + border + '\n')
                                     print(subject)
                                     print(auditory)
                                     print(teacher)
@@ -61,24 +66,25 @@ def main(targetUrl: str):
             break
     pass
 
+
 print(os.getpid())
 token = open("./token.token", 'r').readline()
-bot = knocker.Knocker(token = token)
+bot = knocker.Knocker(token=token)
 Farseer.SpawnConfig("SheduleBot")
 while True:
-    days = ["",""]
+    days = ["", ""]
     hour = datetime.datetime.now().hour
     config = json.load(open('./config.json', 'r'))
     if hour == 6:
         for group in config["Groups"]:
             main(group['url'])
             for peer in group['peers']:
-                bot.SendMsg(messageText = days[0], peerId = peer)
+                bot.SendMsg(messageText=days[0], peerId=peer)
         time.sleep(3600)
     elif hour == 18:
         for group in config["Groups"]:
             main(group['url'])
-            for peer in group['peers']: 
-                bot.SendMsg(messageText = days[1], peerId = peer)
+            for peer in group['peers']:
+                bot.SendMsg(messageText=days[1], peerId=peer)
         time.sleep(3600)
     time.sleep(60)
