@@ -53,13 +53,14 @@ def main(targetUrl: str):
                                     print(teacher)
                                     print(border)
                                 pass
+                        elif _lesson == 'Выходной':
+                            if i == 1:
+                                days[i] = "Завтра пар нет. Кути, бухай, еби гусей!\n\n"
+                            elif i == 0:
+                                days[i] = "Сегодня пар нет. Кути, бухай, еби гусей!\n\n"
                 i += 1
             except Exception as e:
-                if i == 1:
-                    days[i] = "Завтра пар нет. Кути, бухай, еби гусей!\n\n"
-                elif i == 0:
-                    days[i] = "Сегодня пар нет. Кути, бухай, еби гусей!\n\n"
-
+                print(str(e))
                 pass
             pass
         else:
