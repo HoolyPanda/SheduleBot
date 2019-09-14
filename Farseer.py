@@ -5,21 +5,23 @@ import time
 class Farseer:
     def __init__(self):
         while True:
-            for file in os.listdir("./pidDir"):
-                pid = open("./pidDir/" + file, 'r').readline().replace('\n', '')
-                path = '/proc/' + pid
-                if os.path.exists(path):
-                    print("Pid ", file, ' is OK')
-                else:
-                    buddy = knocker.Knocker(token = open('./token', 'r').readline().replace('n',''))
-                    buddy.SendMsg("PID: " + (file + ' - ' + pid) + " is not OK", peerId = 160500068)
-            time.sleep(3600)
-def SpawnConfig(name: str):
+            for folder in os.listdir("./users"):
+                for file in os.listdir("./users/" + folder):
+                    pid = open("./users/" + folder + "/" + file, 'r').readline().replace('\n', '')
+                    path = '/proc/' + pid
+                    if os.path.exists(path):
+                        print("Pid ", file, ' is OK')
+                    else:
+                        buddy = knocker.Knocker(token = open('./token.token', 'r').readline().replace('n',''))
+                        buddy.SendMsg("PID: " + (file + ' - ' + pid) + " is not OK", peerId = int(folder))
+            time.sleep(120)
+def SpawnConfig(name: str, peerId: int):
     userName = os.getlogin()
     if userName != 'root':
-        config = open(str('/home/' + str(userName) + "/Farseer/pidDir/" + name), "w+")
+        os.mkdir("/home/" + str(userName) + "/Farseer/" + str(peerId))
+        config = open(str('/home/' + str(userName) + "/Farseer/" + str(peerId) + "/" + name), "w+")
     else:
-        config = open(str('/' + str(userName) + "/Farseer/pidDir/" + name), "w+")
+        config = open(str('/' + str(userName) + "/Farseer/" + str(peerId) + "/" + name), "w+")
     config.write(str(os.getpid()))
     config.close()
     pass
