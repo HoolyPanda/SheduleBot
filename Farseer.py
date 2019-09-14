@@ -18,10 +18,16 @@ class Farseer:
 def SpawnConfig(name: str, peerId: int):
     userName = os.getlogin()
     if userName != 'root':
-        os.mkdir("/home/" + str(userName) + "/Farseer/" + str(peerId))
+        try:
+            os.mkdir("/home/" + str(userName) + "/Farseer/" + str(peerId))
+        except Exception as e:
+            print(str(e))
         config = open(str('/home/' + str(userName) + "/Farseer/" + str(peerId) + "/" + name), "w+")
     else:
-        os.mkdir("/root" + "/Farseer/" + "users/" + str(peerId))
+        try:
+            os.mkdir("/root" + "/Farseer/" + "users/" + str(peerId))
+        except Exception as e:
+            print(str(e))
         config = open(str('/' + str(userName) + "/Farseer/" + str(peerId) + "/" + name), "w+")
     config.write(str(os.getpid()))
     config.close()
