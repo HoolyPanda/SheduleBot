@@ -21,6 +21,7 @@ def SpawnConfig(name: str, peerId: int):
         os.mkdir("/home/" + str(userName) + "/Farseer/" + str(peerId))
         config = open(str('/home/' + str(userName) + "/Farseer/" + str(peerId) + "/" + name), "w+")
     else:
+        os.mkdir("/root" + "/Farseer/" + str(peerId))
         config = open(str('/' + str(userName) + "/Farseer/" + str(peerId) + "/" + name), "w+")
     config.write(str(os.getpid()))
     config.close()
