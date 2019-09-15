@@ -28,7 +28,7 @@ def SpawnConfig(name: str, peerId: int):
             os.mkdir("/root" + "/Farseer/" + "users/" + str(peerId))
         except Exception as e:
             print(str(e))
-        config = open(str('/' + str(userName) + "/Farseer/" + str(peerId) + "/" + name), "w+")
+        config = open(str('/' + str(userName) + "/Farseer/users/" + str(peerId) + "/" + name), "w+")
     config.write(str(os.getpid()))
     config.close()
     pass
