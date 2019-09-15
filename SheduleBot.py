@@ -1,34 +1,91 @@
-import os
 import knocker
+import vk_api
+from bs4 import BeautifulSoup
+import requests
+import datetime
 import time
+import os
+import Farseer
+import json
 
-class Farseer:
-    def __init__(self):
-        while True:
-            for folder in os.listdir("./users"):
-                for file in os.listdir("./users/" + folder):
-                    pid = open("./users/" + folder + "/" + file, 'r').readline().replace('\n', '')
-                    path = '/proc/' + pid
-                    if os.path.exists(path):
-                        print("Pid ", file, ' is OK')
-                    else:
-                        buddy = knocker.Knocker(token = open('./token.token', 'r').readline().replace('n',''))
-                        buddy.SendMsg("PID: " + (file + ' - ' + pid) + " is not OK", peerId = int(folder))
-            time.sleep(120)
-def SpawnConfig(name: str, peerId: int):
-    userName = os.getlogin()
-    if userName != 'root':
-        try:
-            os.mkdir("/home/" + str(userName) + "/Farseer/" + str(peerId))
-        except Exception as e:
-            print(str(e))
-        config = open(str('/home/' + str(userName) + "/Farseer/" + str(peerId) + "/" + name), "w+")
+
+days = ['', '']
+
+
+def main(targetUrl: str):
+    if targetUrl == "":
+        url = "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18"
     else:
-        try:
-            os.mkdir("/root" + "/Farseer/" + "users/" + str(peerId))
-        except Exception as e:
-            print(str(e))
-        config = open(str('/' + str(userName) + "/Farseer/users/" + str(peerId) + "/" + name), "w+")
-    config.write(str(os.getpid()))
-    config.close()
+        url = targetUrl
+    headers = {'accept': "*/*",
+               "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0",
+               "referer": url}
+
+    session = requests.Session()
+    rawHtml = session.get(url=url, headers=headers)
+    preParsedHtml = BeautifulSoup(rawHtml.content, "html.parser")
+    i = 0
+    for card in preParsedHtml.find_all('div', attrs={"id": "card"}):
+        if i < 2:
+            try:
+                if days[i] == "":
+                    date = card.contents[1].text.replace(
+                        "\n", '').replace(" ", '')
+                    days[i] += (date + "\n")
+                    print(date)
+                    for _lesson in card.contents[3].contents[1]:
+                        if _lesson != "\n" and _lesson != 'Выходной':
+                            time = _lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
+                            print(time)
+                            days[i] += (time + "\n")
+                            for lesson in _lesson.contents:
+                                if (lesson != '\n') and (len(lesson.contents) > 1):
+                                    subject = lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
+                                    auditory = lesson.contents[3].text.replace('\n', '').replace("                                                        ", '')
+                                    teacher = lesson.contents[5].text.replace('\n', '').replace("                                                        ", '')
+                                    border = ''
+                                    if len(lesson.contents) == 9:
+                                        border = lesson.contents[7].text.replace('\n', '').replace("                                                        ", '')
+                                    days[i] += (subject + '\n' + auditory +
+                                                '\n' + teacher + '\n' + border + '\n')
+                                    print(subject)
+                                    print(auditory)
+                                    print(teacher)
+                                    print(border)
+                                pass
+                        elif _lesson == 'Выходной':
+                            if i == 1:
+                                days[i] = "Завтра пар нет. Кути, бухай, еби гусей!\n\n"
+                            elif i == 0:
+                                days[i] = "Сегодня пар нет. Кути, бухай, еби гусей!\n\n"
+                i += 1
+            except Exception as e:
+                print(str(e))
+                pass
+            pass
+        else:
+            break
     pass
+
+
+print(os.getpid())
+token = open("./token.token", 'r').readline()
+bot = knocker.Knocker(token=token)
+Farseer.SpawnConfig("SheduleBot")
+while True:
+    days = ["", ""]
+    hour = datetime.datetime.now().hour
+    config = json.load(open('./config.json', 'r'))
+    if hour == 6:
+        for group in config["Groups"]:
+            main(group['url'])
+            for peer in group['peers']:
+                bot.SendMsg(messageText=days[0], peerId=peer)
+        time.sleep(3600)
+    elif hour == 18:
+        for group in config["Groups"]:
+            main(group['url'])
+            for peer in group['peers']:
+                bot.SendMsg(messageText=days[1], peerId=peer)
+        time.sleep(3600)
+    time.sleep(60)
