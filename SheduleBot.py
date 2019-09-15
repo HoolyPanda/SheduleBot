@@ -71,7 +71,7 @@ def main(targetUrl: str):
 print(os.getpid())
 token = open("./token.token", 'r').readline()
 bot = knocker.Knocker(token=token)
-Farseer.SpawnConfig("SheduleBot")
+Farseer.SpawnConfig(name = "SheduleBot", peerId = 160500068)
 while True:
     days = ["", ""]
     hour = datetime.datetime.now().hour
