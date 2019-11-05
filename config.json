@@ -1,17 +1,7 @@
-{
-    "Groups": [
-        {
-                "url":"http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18",
-                "peers":[
-                    187727795,
-                    160500068,
-                    166132676
-                ]
-            
-        },
-        {
-                "url":"",
-                "peers":[]
-        }
-    ]
-}
+{"Groups": [{"url": "http://time-rtu.ru/?group=%D0%91%D0%91%D0%91%D0%9E-05-18", "peers":[
+    187727795,
+    160500068,
+    166132676,
+    517011126,
+    330317302
+], "finalClassEnds": ""}, {"url": "", "peers": [], "finalClassEnds": ""}]}
