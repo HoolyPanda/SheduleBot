@@ -9,10 +9,10 @@ import Farseer
 import json
 
 
-days = ['', '']
 
 class SheduleBot:
     def __init__(self):
+        self.days = ['', '']
         self.group = None
         pass
     def main(self, targetUrl: str):
@@ -31,16 +31,16 @@ class SheduleBot:
         for card in preParsedHtml.find_all('div', attrs={"id": "card"}):
             if i < 2:
                 try:
-                    if days[i] == "":
+                    if self.days[i] == "":
                         date = card.contents[1].text.replace(
                             "\n", '').replace(" ", '')
-                        days[i] += (date + "\n")
+                        self.days[i] += (date + "\n")
                         print(date)
                         for _lesson in card.contents[3].contents[1]:
                             if _lesson != "\n" and _lesson != 'Выходной':
                                 time = _lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
                                 print(time)
-                                days[i] += (time + "\n")
+                                self.days[i] += (time + "\n")
                                 for lesson in _lesson.contents:
                                     if (lesson != '\n') and (len(lesson.contents) > 1):
                                         subject = lesson.contents[1].text.replace('\n', '').replace("                                                        ", '')
@@ -49,7 +49,7 @@ class SheduleBot:
                                         border = ''
                                         if len(lesson.contents) == 9:
                                             border = lesson.contents[7].text.replace('\n', '').replace("                                                        ", '')
-                                        days[i] += (subject + '\n' + auditory +
+                                        self.days[i] += (subject + '\n' + auditory +
                                                     '\n' + teacher + '\n' + border + '\n')
                                         print(subject)
                                         print(auditory)
@@ -64,9 +64,9 @@ class SheduleBot:
                                     pass
                             elif _lesson == 'Выходной':
                                 if i == 1:
-                                    days[i] = "Завтра пар нет. Кути, бухай, еби гусей!\n\n"
+                                    self.days[i] = "Завтра пар нет. Кути, бухай, еби гусей!\n\n"
                                 elif i == 0:
-                                    days[i] = "Сегодня пар нет. Кути, бухай, еби гусей!\n\n"
+                                    self.days[i] = "Сегодня пар нет. Кути, бухай, еби гусей!\n\n"
                     i += 1
                 except Exception as e:
                     print(str(e))
@@ -82,22 +82,22 @@ token = open("./token.token", 'r').readline()
 bot = knocker.Knocker(token=token)
 Farseer.SpawnConfig(name = "SheduleBot", peerId = 160500068)
 sheduleBot = SheduleBot() 
+
 while True:
-    days = ["", ""]
     currentTime = str(datetime.datetime.now().hour) + ":" + str(datetime.datetime.now().minute)
     config = json.load(open('./config.json', 'r'))
     for group in config["Groups"]:
         sheduleBot.group = group
-        if currentTime == "6:00":
+        if currentTime == "6:00" and group["finalClassEnds"] == "":
             sheduleBot.main(targetUrl= group['url'])
             for peer in group['peers']:
-                bot.SendMsg(messageText=days[0], peerId=peer)
+                bot.SendMsg(messageText=sheduleBot.days[0], peerId=peer)
             pass
         elif currentTime == group["finalClassEnds"]:
             sheduleBot.main(group['url'])
             for peer in group['peers']:
-                bot.SendMsg(messageText=days[1], peerId=peer)
+                bot.SendMsg(messageText=sheduleBot.days[1], peerId=peer)
                 pass
             group["finalClassEnds"] = ""
     json.dump(config, open("./config.json", "w"))
-    time.sleep(30)
+    time.sleep(10)
