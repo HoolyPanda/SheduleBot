@@ -88,9 +88,10 @@ while True:
     config = json.load(open('./config.json', 'r'))
     for group in config["Groups"]:
         sheduleBot.group = group
-        if currentTime == "6:00" and group["finalClassEnds"] == "":
+        if currentTime[0] == "6" and group["finalClassEnds"] == '':
             sheduleBot.main(targetUrl= group['url'])
             for peer in group['peers']:
+                print("sent to " + str(peer))
                 bot.SendMsg(messageText=sheduleBot.days[0], peerId=peer)
             pass
         elif currentTime == group["finalClassEnds"]:
