@@ -60,13 +60,18 @@ class SheduleBot:
                                                 self.group["finalClassEnds"] = time.replace(" ", "")
                                             else:
                                                 pass
+                                        if time == '18:10':
+                                            if self.group['finalClassEnds'] == '':
+                                                self.group['finalClassEnds'] = "19:40"
 
                                     pass
                             elif _lesson == 'Выходной':
                                 if i == 1:
                                     self.days[i] = "Завтра пар нет. Кути, бухай, еби гусей!\n\n"
+
                                 elif i == 0:
                                     self.days[i] = "Сегодня пар нет. Кути, бухай, еби гусей!\n\n"
+                                self.group['finalClassEnds'] = "18:00"
                     i += 1
                 except Exception as e:
                     print(str(e))
