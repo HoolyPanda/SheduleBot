@@ -93,7 +93,7 @@ while True:
     config = json.load(open('./config.json', 'r'))
     for group in config["Groups"]:
         sheduleBot.group = group
-        if currentTime[0] == "6" and group["finalClassEnds"] == '':
+        if currentTime[0] == "1" and group["finalClassEnds"] == '':
             sheduleBot.main(targetUrl= group['url'])
             for peer in group['peers']:
                 print("sent to " + str(peer))
