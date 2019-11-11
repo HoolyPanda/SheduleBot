@@ -58,6 +58,7 @@ class SheduleBot:
                                         if subject == '- - - - - - - - - - - - - - - - - - - - - - - ':
                                             if self.group["finalClassEnds"] == "":
                                                 self.group["finalClassEnds"] = time.replace(" ", "")
+                                                # self.group["finalClassEnds"] = "10:44"
                                             else:
                                                 pass
                                         if time == '18:10':
@@ -93,7 +94,7 @@ while True:
     config = json.load(open('./config.json', 'r'))
     for group in config["Groups"]:
         sheduleBot.group = group
-        if currentTime[0] == "1" and group["finalClassEnds"] == '':
+        if currentTime == "6:00" and group["finalClassEnds"] == '':
             sheduleBot.main(targetUrl= group['url'])
             for peer in group['peers']:
                 print("sent to " + str(peer))
