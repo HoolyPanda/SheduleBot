@@ -22,9 +22,9 @@ class Knocker:
             print(str(e))
             pass
 
-    def SendMsg(self, messageText : str, peerId):
+    def SendMsg(self, messageText: str, peerId: int):
         try:
-            self.bot.method("messages.send",{"peer_id": peerId, "random_id" : random.randint(1, 1000),"message": messageText})
+            self.bot.method("messages.send",{"peer_id": peerId, "random_id" : random.randint(1, 100000000000000),"message": messageText})
         except Exception as e:
             print(str(e))
             pass
